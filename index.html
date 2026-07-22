@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#F4F7F3">
-<title>Sleeved — Cash stuffing, digital</title>
+<meta name="theme-color" content="#F5EBDA">
+<title>Sleeved — Cash-envelope budgeting</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#F4F7F3;--card:#FFFFFF;--line:#DCE5DA;--ink:#1C2620;--mut:#68786C;--dim:#9CACA0;--acc:#1F7A4D;--warn:#C08552;--over:#C25E4C}
+:root{--bg:#F5EBDA;--card:#FFFFFF;--line:#E3D2B8;--ink:#2B2015;--mut:#7A6650;--dim:#A88F76;--acc:#B5542A;--warn:#8A5A35;--over:#C25E4C}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{background:var(--bg);color:var(--ink);font-family:'Space Grotesk',system-ui,sans-serif;min-height:100vh;min-height:100dvh}
 .wrap{max-width:440px;margin:0 auto;padding:24px 20px 44px}
@@ -30,8 +30,10 @@ label{display:block;font-size:12px;color:var(--mut);margin:13px 0 6px;font-weigh
 .spend{background:var(--bg);border:1px solid var(--line);color:var(--acc);padding:8px 13px;border-radius:8px;font-family:'Space Mono',monospace;font-size:11px;cursor:pointer;font-weight:700}
 .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 20px;border-radius:10px;font-family:'Space Mono',monospace;font-size:12px;z-index:200}
 .hidden{display:none!important}
-.lockrow{text-align:center;padding:14px 0 4px}
-.lockrow button{background:none;border:none;color:var(--acc);font-size:12.5px;font-weight:700;cursor:pointer}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center}
+.stat b{font-family:'Space Mono',monospace;font-size:19px;display:block;color:var(--acc)}
+.stat span{font-size:9px;letter-spacing:.13em;color:var(--dim);text-transform:uppercase;font-family:'Space Mono',monospace}
 </style>
 <link rel="manifest" href="manifest.json">
 <script>if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js")</script>
@@ -40,15 +42,15 @@ label{display:block;font-size:12px;color:var(--mut);margin:13px 0 6px;font-weigh
 <div class="wrap">
 
 <div style="display:flex;justify-content:space-between;align-items:baseline">
-  <div class="eyebrow">SLEEVED</div>
+  <div class="eyebrow">ENVELOPES</div>
   <button onclick="newMonth()" style="background:none;border:none;color:var(--dim);font-size:11px;cursor:pointer;font-family:'Space Mono',monospace">NEW MONTH</button>
 </div>
 <h1 style="margin:8px 0 6px">Cash stuffing,<br><span style="color:var(--acc)">without the cash.</span></h1>
-<p style="color:var(--mut);font-size:13.5px;line-height:1.55;margin-bottom:14px">Grandma's system, because it works: money split into envelopes, and when an envelope is empty, you stop. Watch each one drain as the month goes. No bank linking, no account — just you and the math.</p>
+<p style="color:var(--mut);font-size:13.5px;line-height:1.55;margin-bottom:14px">Grandma's system, because it works: money split into envelopes, and when an envelope is empty, you stop. Watch each one drain as the month goes.</p>
 
-<div class="row2" style="margin-top:0;display:grid;grid-template-columns:1fr 1fr;gap:10px">
-  <div class="stat" style="background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center"><b id="st-left" style="font-family:'Space Mono',monospace;font-size:19px;display:block;color:var(--acc)">$0</b><span style="font-size:9px;letter-spacing:.13em;color:var(--dim);text-transform:uppercase;font-family:'Space Mono',monospace">left this month</span></div>
-  <div class="stat" style="background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center"><b id="st-budget" style="font-family:'Space Mono',monospace;font-size:19px;display:block;color:var(--ink)">$0</b><span style="font-size:9px;letter-spacing:.13em;color:var(--dim);text-transform:uppercase;font-family:'Space Mono',monospace">total budget</span></div>
+<div class="row2" style="margin-top:0">
+  <div class="stat"><b id="st-left">$0</b><span>left this month</span></div>
+  <div class="stat"><b id="st-budget" style="color:var(--ink)">$0</b><span>total budget</span></div>
 </div>
 
 <div class="card hidden" style="margin-top:12px" id="envcard">
@@ -57,7 +59,7 @@ label{display:block;font-size:12px;color:var(--mut);margin:13px 0 6px;font-weigh
 </div>
 
 <div style="height:10px"></div>
-<button class="btn btn-ghost" id="addbtn" onclick="toggleAdd()">+ New envelope</button>
+<button class="btn btn-ghost" onclick="toggleAdd()">+ New envelope</button>
 
 <div class="card hidden" id="addform" style="margin-top:10px">
   <label>Envelope name</label>
@@ -68,18 +70,12 @@ label{display:block;font-size:12px;color:var(--mut);margin:13px 0 6px;font-weigh
   <button class="btn btn-acc" onclick="addEnv()">Stuff the envelope</button>
 </div>
 
-<p style="color:var(--dim);font-size:11px;margin-top:18px;text-align:center">No account. No ads. No bank linking, ever.</p>
-
 </div>
 <script>
-const store={m:{},get(k,d){try{const v=localStorage.getItem('sl_'+k);return v!==null?JSON.parse(v):d}catch(e){return k in this.m?this.m[k]:d}},set(k,v){try{localStorage.setItem('sl_'+k,JSON.stringify(v))}catch(e){this.m[k]=v}}};
-let envs=store.get('envs',[]);
-const FREE_LIMIT=2;
-function save(){store.set('envs',envs)}
-function toggleAdd(){
-  if(!Billing.isPro() && envs.length>=FREE_LIMIT){Billing.requirePro('limit');return}
-  document.getElementById('addform').classList.toggle('hidden')
-}
+const store={m:{},get(k,d){try{const v=localStorage.getItem('ev_'+k);return v!==null?JSON.parse(v):d}catch(e){return k in this.m?this.m[k]:d}},set(k,v){try{localStorage.setItem('ev_'+k,JSON.stringify(v))}catch(e){this.m[k]=v}}};
+let envs=store.get('envs',[]),spendCount=store.get('spendCount',0);
+function save(){store.set('envs',envs);store.set('spendCount',spendCount)}
+function toggleAdd(){document.getElementById('addform').classList.toggle('hidden')}
 function addEnv(){
   const n=document.getElementById('e-name').value.trim();
   const a=parseFloat(document.getElementById('e-amt').value);
@@ -93,9 +89,10 @@ function spend(id){
   const e=envs.find(x=>x.id===id);
   const a=parseFloat(prompt('Spent from '+e.name+' ($):'));
   if(!a||a<=0)return;
-  e.spent+=a;save();render();
+  e.spent+=a;spendCount++;save();render();
   const left=e.budget-e.spent;
   toast(left<0?e.name.toUpperCase()+' OVER BY $'+Math.abs(left).toFixed(0):'$'+left.toFixed(0)+' LEFT IN '+e.name.toUpperCase());
+  if(spendCount%4===0&&typeof GK!=='undefined')GK.win();
 }
 function removeEnv(id){
   const e=envs.find(x=>x.id===id);
@@ -115,8 +112,7 @@ function render(){
   document.getElementById('monthname').textContent=new Date().toLocaleDateString(undefined,{month:'long'}).toUpperCase();
   const ec=document.getElementById('envcard');
   ec.classList.toggle('hidden',envs.length===0);
-  const visible=Billing.isPro()?envs:envs.slice(0,FREE_LIMIT);
-  let html=visible.map(e=>{
+  document.getElementById('envs').innerHTML=envs.map(e=>{
     const pct=Math.min(100,e.spent/e.budget*100);
     const left=e.budget-e.spent;
     const over=left<0;
@@ -129,15 +125,59 @@ function render(){
       <div class="ebar"><div class="efill" style="width:${pct}%;background:${over?'var(--over)':pct>75?'var(--warn)':'var(--acc)'}"></div></div>
     </div>`;
   }).join('');
-  if(!Billing.isPro() && envs.length>FREE_LIMIT){
-    html+=`<div class="lockrow"><button onclick="Billing.openPaywall('limit')">+ ${envs.length-FREE_LIMIT} more · Unlock unlimited envelopes →</button></div>`;
-  }
-  document.getElementById('envs').innerHTML=html;
 }
 function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
 function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2200)}
-document.addEventListener('sleeved-pro-changed',render);
 render();
+</script>
+<script>
+const GK_CONFIG={app:'Sleeved',pkg:'com.tigerbrands.envelopes',accent:'#B5542A',bg:'#F5EBDA',ink:'#2B2015',
+  onboard:[{h:'Grandma\'s system works',p:'Money split into envelopes. When an envelope is empty, you stop. Simple, brutal, effective.'},{h:'Stuff, spend, see',p:'Create envelopes with monthly budgets, log spending as it happens, watch each bar drain. New month, restuff.'}],askAfterWins:2};
+const GK={
+  s:{get(k,d){try{const v=localStorage.getItem('gk_'+GK_CONFIG.app+'_'+k);return v!==null?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('gk_'+GK_CONFIG.app+'_'+k,JSON.stringify(v))}catch(e){}}},
+  css(){const c=GK_CONFIG;const st=document.createElement('style');
+    st.textContent=`.gk-ov{position:fixed;inset:0;background:${c.bg}F2;z-index:900;display:flex;align-items:center;justify-content:center;padding:26px;backdrop-filter:blur(4px)}
+.gk-card{background:${c.bg};border:1px solid ${c.accent}66;border-radius:16px;padding:26px 22px;max-width:360px;width:100%;color:${c.ink};font-family:system-ui,sans-serif;box-shadow:0 20px 60px -20px rgba(0,0,0,.45)}
+.gk-h{font-size:21px;font-weight:700;margin-bottom:8px;line-height:1.15}
+.gk-p{font-size:14px;line-height:1.6;opacity:.75;margin-bottom:18px}
+.gk-btn{display:block;width:100%;padding:14px;border:none;border-radius:10px;background:${c.accent};color:${c.bg};font-size:15px;font-weight:700;cursor:pointer;font-family:system-ui,sans-serif}
+.gk-ghost{background:transparent;color:${c.ink};opacity:.55;border:none;width:100%;padding:12px;font-size:13px;cursor:pointer;font-family:system-ui,sans-serif}
+.gk-dots{display:flex;gap:6px;justify-content:center;margin-bottom:16px}
+.gk-dot{width:7px;height:7px;border-radius:50%;background:${c.ink};opacity:.25}
+.gk-dot.on{background:${c.accent};opacity:1}
+.gk-foot{text-align:center;padding:22px 0 6px;font-family:monospace;font-size:10.5px;letter-spacing:.08em}
+.gk-foot a{color:${c.accent};text-decoration:none;opacity:.85}`;
+    document.head.appendChild(st)},
+  onboard(){if(GK.s.get('onboarded',false))return;
+    let i=0;const ov=document.createElement('div');ov.className='gk-ov';
+    const render=()=>{const step=GK_CONFIG.onboard[i];
+      ov.innerHTML=`<div class="gk-card"><div class="gk-dots">${GK_CONFIG.onboard.map((_,j)=>`<div class="gk-dot ${j===i?'on':''}"></div>`).join('')}</div><div class="gk-h">${step.h}</div><div class="gk-p">${step.p}</div><button class="gk-btn" id="gk-next">${i<GK_CONFIG.onboard.length-1?'Next':"Let's go"}</button></div>`;
+      ov.querySelector('#gk-next').onclick=()=>{i++;if(i>=GK_CONFIG.onboard.length){GK.s.set('onboarded',true);ov.remove()}else render()}};
+    render();document.body.appendChild(ov)},
+  win(){const wins=GK.s.get('wins',0)+1;GK.s.set('wins',wins);
+    const state=GK.s.get('review','pending');
+    if(state==='done'||state==='never')return;
+    const threshold=state==='later'?GK.s.get('nextAsk',999):GK_CONFIG.askAfterWins;
+    if(wins>=threshold)setTimeout(()=>GK.gate(wins),900)},
+  gate(wins){const ov=document.createElement('div');ov.className='gk-ov';
+    ov.innerHTML=`<div class="gk-card"><div class="gk-h">Is ${GK_CONFIG.app} actually helping you?</div><div class="gk-p">Honest answer — it decides what I build next.</div><button class="gk-btn" id="gk-yes">Yes, it's working</button><button class="gk-ghost" id="gk-no">Not really</button></div>`;
+    document.body.appendChild(ov);
+    ov.querySelector('#gk-yes').onclick=()=>{
+      ov.querySelector('.gk-card').innerHTML=`<div class="gk-h">That's the goal 🤝</div><div class="gk-p">A 30-second review is what keeps a free, no-ads app alive on the Play Store. Would you leave one?</div><button class="gk-btn" id="gk-rate">Leave a review</button><button class="gk-ghost" id="gk-later">Maybe later</button>`;
+      ov.querySelector('#gk-rate').onclick=()=>{GK.s.set('review','done');window.open('market://details?id='+GK_CONFIG.pkg);ov.remove()};
+      ov.querySelector('#gk-later').onclick=()=>{const again=GK.s.get('review','pending')==='later';GK.s.set('review',again?'never':'later');GK.s.set('nextAsk',wins+10);ov.remove()}};
+    ov.querySelector('#gk-no').onclick=()=>{GK.s.set('review','never');
+      ov.querySelector('.gk-card').innerHTML=`<div class="gk-h">Tell me what's wrong.</div><div class="gk-p">I read every email and ship fixes fast. What's not working for you?</div><button class="gk-btn" id="gk-mail">Email the developer</button><button class="gk-ghost" id="gk-skip">Skip</button>`;
+      ov.querySelector('#gk-mail').onclick=()=>{GK.feedback('Something is not working for me');ov.remove()};
+      ov.querySelector('#gk-skip').onclick=()=>ov.remove()}},
+  feedback(subject){location.href='mailto:support@tigerbrandsglobal.com?subject='+encodeURIComponent('['+GK_CONFIG.app+'] '+(subject||'Feedback'))+'&body='+encodeURIComponent('App: '+GK_CONFIG.app+'\n\n')},
+  footer(){const f=document.createElement('div');f.className='gk-foot';
+    f.innerHTML=`<a href="#" onclick="GK.feedback();return false">FEEDBACK & IDEAS → SUPPORT@TIGERBRANDSGLOBAL.COM</a>`;
+    (document.querySelector('.wrap')||document.body).appendChild(f)},
+  offer(){},
+  init(){GK.css();GK.footer();GK.onboard()}
+};
+GK.init();
 </script>
 <script src="billing.js"></script>
 </body>
