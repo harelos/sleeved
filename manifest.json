@@ -1,0 +1,16 @@
+{
+  "name": "Sleeved — Cash Stuffing, Digital",
+  "short_name": "Sleeved",
+  "description": "The cash-envelope budgeting method without the cash. Split your money into digital envelopes, watch each one drain, stop when it's empty. No bank linking, no account.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F4F7F3",
+  "theme_color": "#F4F7F3",
+  "categories": ["finance", "lifestyle"],
+  "icons": [
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
